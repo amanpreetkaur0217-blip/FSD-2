@@ -1,0 +1,321 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #2dadd8ce, #ffffff51);
+}
+
+.container {
+  width: 90%;
+  max-width: 800px;
+  margin: 30px auto;
+}
+
+h1 {
+  text-align: center;
+  color: black;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+h2 {
+  margin-top: 30px;
+  color: #333;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, .15);
+  transition: .3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, .25);
+}
+
+.checkbox {
+  display: inline-block;
+  margin-right: 20px;
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+.checkbox input {
+  margin-right: 5px;
+}
+
+textarea {
+  width: 100%;
+  height: 150px;
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+  resize: none;
+  font-size: 16px;
+  transition: .3s;
+}
+
+textarea:hover {
+  border-color: #2196f3;
+}
+
+textarea:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 10px rgba(76, 175, 80, .4);
+}
+
+.errorBox {
+  border: 2px solid red;
+}
+
+.counter {
+  margin-top: 15px;
+}
+
+.counter p {
+  margin: 5px 0;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+  font-weight: bold;
+}
+
+.warning {
+  margin-top: 15px;
+  padding: 12px;
+  background: #ffe5e5;
+  color: red;
+  border-left: 6px solid red;
+  border-radius: 8px;
+  animation: fade .3s;
+}
+
+.buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
+  transition: .3s;
+}
+
+button:hover {
+  transform: translateY(-3px);
+}
+
+button:first-child {
+  background: #2196F3;
+}
+
+button:first-child:hover {
+  background: #1976D2;
+  box-shadow: 0 8px 20px rgba(33, 150, 243, .4);
+}
+
+button:last-child {
+  background: #4CAF50;
+}
+
+button:last-child:hover {
+  background: #388E3C;
+  box-shadow: 0 8px 20px rgba(76, 175, 80, .4);
+}
+
+.disabled {
+  background: gray !important;
+  cursor: not-allowed;
+}
+
+.draftCard {
+  background: white;
+  margin-top: 15px;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  transition: 0.3s;
+}
+
+.draftCard:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, .2);
+}
+
+.draftCard p {
+  margin-bottom: 10px;
+  word-wrap: break-word;
+}
+
+.draftCard small {
+  color: #555;
+}
+
+.draftButtons {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.draftButtons button:first-child {
+  background: orange;
+}
+
+.draftButtons button:first-child:hover {
+  background: darkorange;
+}
+
+.draftButtons button:last-child {
+  background: crimson;
+}
+
+.draftButtons button:last-child:hover {
+  background: darkred;
+}
+
+@media (max-width: 600px) {
+
+  .buttons,
+  .draftButtons {
+    flex-direction: column;
+  }
+
+  .checkbox {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  textarea {
+    height: 120px;
+  }
+}
+
+.message {
+  margin: 15px 0;
+  padding: 12px;
+  background: #d4edda;
+  color: #155724;
+  border-left: 5px solid green;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+  animation: fade .4s;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown {
+  width: 100%;
+  padding: 10px;
+  margin: 15px 0;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+  font-size: 16px;
+}
+
+.selectedPlatforms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.tag {
+  background: #2196f3;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: .3s;
+}
+
+.tag:hover {
+  background: #1976D2;
+  transform: scale(1.05);
+}
+
+.tag button {
+  border: none;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.dropdownContainer {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.dropdownBtn {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: .3s;
+}
+
+.dropdownBtn:hover {
+  border-color: #2196f3;
+  box-shadow: 0 5px 15px rgba(33, 150, 243, .2);
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 105%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, .2);
+  z-index: 100;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  cursor: pointer;
+}
+
+.menuItem:hover {
+  background: #e3f2fd;
+  padding-left: 18px;
+}
