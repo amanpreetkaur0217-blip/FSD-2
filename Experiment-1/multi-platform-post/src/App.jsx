@@ -9,37 +9,35 @@ function App() {
   };
 
   const [text, setText] = useState("");
-  const [platforms, setPlatforms] = useState([]);
+  const [platform, setPlatform] = useState("");
   const [drafts, setDrafts] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
   const [message, setMessage] = useState("");
-  const [showDropdown, setShowDropdown] = useState(false);
 
+  // Load drafts
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("drafts")) || [];
     setDrafts(saved);
   }, []);
 
+  // Save drafts
   useEffect(() => {
     localStorage.setItem("drafts", JSON.stringify(drafts));
   }, [drafts]);
 
-  const handlePlatform = (platform) => {
-    if (platforms.includes(platform)) {
-      setPlatforms(platforms.filter((p) => p !== platform));
-    } else {
-      setPlatforms([...platforms, platform]);
-    }
+  // Character limit check
+  const hasError = platform && text.length > limits[platform];
+
+  // Show temporary message
+  const showMessage = (msg) => {
+    setMessage(msg);
+
+    setTimeout(() => {
+      setMessage("");
+    }, 3000);
   };
 
-  const hasError = platforms.some(
-    (platform) => text.length > limits[platform]
-  );
-
-  const exceededPlatforms = platforms.filter(
-    (platform) => text.length > limits[platform]
-  );
-
+  // Save Draft
   const saveDraft = () => {
     if (text.trim() === "") {
       showMessage("❌ Write something first!");
@@ -48,7 +46,7 @@ function App() {
 
     const draft = {
       text,
-      platforms,
+      platform,
       date: new Date().toLocaleString("en-IN", {
         day: "2-digit",
         month: "short",
@@ -66,18 +64,21 @@ function App() {
     } else {
       setDrafts([...drafts, draft]);
     }
+
     showMessage("✅ Draft Saved Successfully!");
 
     setText("");
-    setPlatforms([]);
+    setPlatform("");
   };
 
+  // Edit Draft
   const editDraft = (index) => {
     setText(drafts[index].text);
-    setPlatforms(drafts[index].platforms);
+    setPlatform(drafts[index].platform);
     setEditIndex(index);
   };
 
+  // Delete Draft
   const deleteDraft = (index) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this draft?"
@@ -88,99 +89,49 @@ function App() {
       setDrafts(updated);
     }
   };
-  const showMessage = (msg) => {
-    setMessage(msg);
 
-    setTimeout(() => {
-      setMessage("");
-    }, 3000);
-  };
-
+  // Publish
   const publishPost = () => {
     if (text.trim() === "") {
       showMessage("❌ Write a post first!");
       return;
     }
 
-    if (platforms.length === 0) {
-      showMessage("❌ Select at least one platform!");
+    if (!platform) {
+      showMessage("❌ Select a platform!");
       return;
     }
 
     if (hasError) {
-      showMessage("❌ Cannot Publish! Character limit exceeded.");
+      showMessage("❌ Character limit exceeded!");
       return;
     }
 
     showMessage("✅ Post Published Successfully!");
 
     setText("");
-    setPlatforms([]);
+    setPlatform("");
   };
 
   return (
     <div className="container">
-
       <h1>📢 Multi Platform Post Composer</h1>
 
       {message && <div className="message">{message}</div>}
 
       <div className="card">
+        <h3>Select Platform</h3>
 
-        <h3>Select Platform(s)</h3>
-
-        <div className="dropdownContainer">
-
-          <button
-            type="button"
-            className="dropdownBtn"
-            onClick={() => setShowDropdown(!showDropdown)}
-          >
-            {platforms.length === 0
-              ? "Select Platform(s)"
-              : platforms.join(", ")}
-
-            ▼
-          </button>
-
-          {showDropdown && (
-            <div className="dropdownMenu">
-
-              {Object.keys(limits).map((platform) => (
-
-                <label key={platform} className="menuItem">
-
-                  <input
-                    type="checkbox"
-                    checked={platforms.includes(platform)}
-                    onChange={() => handlePlatform(platform)}
-                  />
-
-                  {platform}
-
-                </label>
-
-              ))}
-
-            </div>
-          )}
-
-        </div>
-
-        <div className="selectedPlatforms">
-          {platforms.map((platform) => (
-            <span key={platform} className="tag">
-              {platform}
-
-              <button onClick={() =>
-                setPlatforms(platforms.filter((p) => p !== platform))
-              }>
-                ×
-              </button>
-
-            </span>
-          ))}
-        </div>
+        <select
+          className="dropdown"
+          value={platform}
+          onChange={(e) => setPlatform(e.target.value)}
+        >
+          <option value="">Select Platform</option>
+          <option value="Twitter">Twitter</option>
+          <option value="LinkedIn">LinkedIn</option>
+          <option value="Instagram">Instagram</option>
+        </select>
 
         <textarea
           className={hasError ? "errorBox" : ""}
@@ -189,44 +140,22 @@ function App() {
           onChange={(e) => setText(e.target.value)}
         ></textarea>
 
-        <div className="counter">
+        {platform && (
+          <div className="counter">
+            <p className={hasError ? "red" : "green"}>
+              <b>{platform}</b> : {text.length} / {limits[platform]}
+            </p>
 
-          {platforms.map((platform) => (
-
-            <div key={platform}>
-
-              <p className={text.length > limits[platform] ? "red" : "green"}>
-
-                <b>{platform}</b>
-
-                {" : "}
-
-                {text.length} / {limits[platform]}
-
-              </p>
-
-              <small>
-
-                Remaining :
-
-                {Math.max(0, limits[platform] - text.length)}
-
-              </small>
-
-            </div>
-
-          ))}
-
-        </div>
+            <small>
+              Remaining : {Math.max(0, limits[platform] - text.length)}
+            </small>
+          </div>
+        )}
 
         {hasError && (
           <div className="warning">
-            {exceededPlatforms.map((platform) => (
-              <p key={platform}>
-                ⚠ {platform} limit exceeded by{" "}
-                {text.length - limits[platform]} characters.
-              </p>
-            ))}
+            ⚠ {platform} limit exceeded by{" "}
+            {text.length - limits[platform]} characters.
           </div>
         )}
 
@@ -243,7 +172,6 @@ function App() {
             Publish
           </button>
         </div>
-
       </div>
 
       <h2>Saved Drafts</h2>
@@ -253,11 +181,10 @@ function App() {
       ) : (
         drafts.map((draft, index) => (
           <div className="draftCard" key={index}>
-
             <p>{draft.text}</p>
 
             <small>
-              <b>Platforms:</b> {draft.platforms.join(", ")}
+              <b>Platform:</b> {draft.platform}
             </small>
 
             <br />
@@ -267,19 +194,13 @@ function App() {
             </small>
 
             <div className="draftButtons">
-              <button onClick={() => editDraft(index)}>
-                Edit
-              </button>
+              <button onClick={() => editDraft(index)}>Edit</button>
 
-              <button onClick={() => deleteDraft(index)}>
-                Delete
-              </button>
+              <button onClick={() => deleteDraft(index)}>Delete</button>
             </div>
-
           </div>
         ))
       )}
-
     </div>
   );
 }
