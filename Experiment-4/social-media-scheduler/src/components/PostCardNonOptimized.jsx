@@ -1,12 +1,13 @@
 import React from "react";
+import { trackPostCard } from "./renderTracker";
 
-const PostCard = React.memo(function PostCard({
-    post,
-    onDelete,
-}) {
+function PostCardNonOptimized({ post, onDelete }) {
+
+    // Track every render
+    trackPostCard(post.id);
 
     console.log(
-        "🟢 OPTIMIZED: Rendering PostCard",
+        "🔴 Non-Optimized: Rendering PostCard",
         post.id
     );
 
@@ -40,6 +41,6 @@ const PostCard = React.memo(function PostCard({
 
         </div>
     );
-});
+}
 
-export default PostCard;
+export default PostCardNonOptimized;

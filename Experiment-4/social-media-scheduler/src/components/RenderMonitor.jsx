@@ -1,37 +1,107 @@
-import React, { useRef } from "react";
+import React, {
+    useEffect,
+    useState,
+} from "react";
 
-const RenderMonitor = React.memo(function RenderMonitor() {
+import {
+    getRenderStats,
+    subscribeToRenderStats,
+} from "./renderTracker";
 
-    const renderCount = useRef(0);
+function RenderMonitor() {
 
-    renderCount.current += 1;
+    const [stats, setStats] = useState(
+        getRenderStats()
+    );
 
-    console.log(
-        "🟣 RenderMonitor rendered:",
-        renderCount.current
+    useEffect(() => {
+
+        const unsubscribe =
+            subscribeToRenderStats((newStats) => {
+                setStats({
+                    ...newStats,
+                    postCards: {
+                        ...newStats.postCards,
+                    },
+                });
+            });
+
+        return unsubscribe;
+
+    }, []);
+
+    const postCardEntries = Object.entries(
+        stats.postCards
     );
 
     return (
-        <div className="render-monitor">
+        <section className="render-monitor">
 
             <div>
-                <h3>🔍 Render Monitor</h3>
+
+                <h3>
+                    🔍 Render Monitor
+                </h3>
 
                 <p>
                     Tracks component rendering
                 </p>
+
             </div>
 
             <div className="render-count">
-                {renderCount.current}
+                {stats.totalRenders}
             </div>
 
-            <span>
-                renders
-            </span>
+            <div>
 
-        </div>
+                <span>
+                    total renders
+                </span>
+
+            </div>
+
+            <div className="render-details">
+
+                <strong>
+                    Post Cards
+                </strong>
+
+                {postCardEntries.length === 0 ? (
+
+                    <p>
+                        No post renders yet
+                    </p>
+
+                ) : (
+
+                    postCardEntries.map(
+                        ([id, count]) => (
+
+                            <div
+                                key={id}
+                                className="render-row"
+                            >
+
+                                <span>
+                                    Post {id}
+                                </span>
+
+                                <strong>
+                                    {count}
+                                </strong>
+
+                            </div>
+
+                        )
+                    )
+
+                )}
+
+            </div>
+
+        </section>
     );
-});
+}
 
 export default RenderMonitor;

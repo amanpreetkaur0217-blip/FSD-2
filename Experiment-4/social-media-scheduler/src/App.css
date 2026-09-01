@@ -522,3 +522,335 @@ footer {
     gap: 15px;
   }
 }
+
+/* ============================= */
+/* OPTIMIZATION TOGGLE */
+/* ============================= */
+
+.optimization-toggle {
+  margin: 25px 0;
+  padding: 25px;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.optimization-toggle h2 {
+  margin-bottom: 8px;
+}
+
+.optimization-toggle p {
+  margin-bottom: 20px;
+  color: #666;
+}
+
+.toggle-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  font-weight: 600;
+}
+
+.toggle {
+  width: 70px;
+  height: 36px;
+  border: none;
+  border-radius: 20px;
+  background: #999;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.toggle.active {
+  background: #22c55e;
+}
+
+.toggle-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s;
+}
+
+.toggle.active .toggle-circle {
+  transform: translateX(34px);
+}
+
+.mode-display {
+  margin-top: 18px;
+  font-size: 18px;
+}
+
+/* =====================================================
+   OPTIMIZATION CONTROLS
+===================================================== */
+
+.optimization-controls {
+  background: white;
+  border-radius: 15px;
+  padding: 24px;
+  margin-bottom: 25px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.optimization-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.optimization-heading h2 {
+  margin: 0;
+}
+
+.optimization-heading p {
+  margin: 6px 0 0;
+  color: #64748b;
+}
+
+.live-time {
+  background: #eff6ff;
+  color: #2563eb;
+  padding: 10px 15px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+/* OPTIONS */
+
+.optimization-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.optimization-option {
+  padding: 15px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.option-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.optimization-option p {
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 8px 0 0;
+}
+
+/* SWITCH */
+
+.switch {
+  width: 45px;
+  height: 24px;
+  border-radius: 20px;
+  background: #94a3b8;
+  padding: 3px;
+  flex-shrink: 0;
+}
+
+.switch span {
+  display: block;
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.switch-on {
+  background: #2563eb;
+}
+
+.switch-on span {
+  transform: translateX(21px);
+}
+
+/* BOTTOM */
+
+.controls-bottom {
+  border-top: 1px solid #e2e8f0;
+  margin-top: 20px;
+  padding-top: 20px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.live-clock-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.live-clock-control p {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.reset-button {
+  background: #334155;
+}
+
+.reset-button:hover {
+  background: #1e293b;
+}
+
+/* =====================================================
+   CALENDAR + SIDE MONITOR
+===================================================== */
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: 25px;
+  align-items: start;
+}
+
+.workspace-main {
+  min-width: 0;
+}
+
+/* =====================================================
+   SIDE RENDER MONITOR
+===================================================== */
+
+.render-monitor-side {
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 22px;
+
+  box-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.08);
+
+  position: sticky;
+  top: 20px;
+}
+
+.render-monitor-side h2 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+/* SUMMARY */
+
+.render-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.render-summary div {
+  background: #f8fafc;
+  padding: 14px;
+  border-radius: 10px;
+}
+
+.render-summary strong {
+  display: block;
+  font-size: 28px;
+  color: #2563eb;
+}
+
+.render-summary span {
+  color: #64748b;
+  font-size: 11px;
+}
+
+/* RENDER ITEMS */
+
+.render-item {
+  margin-bottom: 17px;
+}
+
+.render-item-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.render-item-header span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.render-item-header strong {
+  color: #2563eb;
+}
+
+/* BAR */
+
+.render-bar {
+  height: 7px;
+  background: #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.render-bar div {
+  height: 100%;
+  background: #6366f1;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+/* CALENDAR COUNT */
+
+.calendar-render {
+  margin-top: 20px;
+  padding: 12px;
+  background: #eff6ff;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.calendar-render strong {
+  margin-left: 8px;
+  color: #2563eb;
+}
+
+/* DESCRIPTION */
+
+.monitor-description {
+  margin-bottom: 0;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1000px) {
+
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .render-monitor-side {
+    position: static;
+  }
+
+  .optimization-options {
+    grid-template-columns: 1fr;
+  }
+}

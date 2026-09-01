@@ -1,11 +1,7 @@
-import React, {
-    useMemo,
-} from "react";
-
+import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 
-function MonitoringPanel() {
-
+function MonitoringPanel({ isOptimized }) {
     const posts = useSelector(
         (state) => state.posts.posts
     );
@@ -14,35 +10,22 @@ function MonitoringPanel() {
         (state) => state.posts.lastAction
     );
 
-    /*
-     * ==========================================
-     * useMemo
-     * ==========================================
-     *
-     * Calculates performance statistics.
-     */
-
+    // Calculate statistics efficiently
     const statistics = useMemo(() => {
-
-        console.log(
-            "⚡ useMemo: Calculating statistics"
-        );
+        console.log("⚡ useMemo: Calculating statistics");
 
         const total = posts.length;
 
         const linkedin = posts.filter(
-            (post) =>
-                post.platform === "LinkedIn"
+            (post) => post.platform === "LinkedIn"
         ).length;
 
         const twitter = posts.filter(
-            (post) =>
-                post.platform === "Twitter"
+            (post) => post.platform === "Twitter"
         ).length;
 
         const instagram = posts.filter(
-            (post) =>
-                post.platform === "Instagram"
+            (post) => post.platform === "Instagram"
         ).length;
 
         return {
@@ -51,11 +34,14 @@ function MonitoringPanel() {
             twitter,
             instagram,
         };
-
     }, [posts]);
 
     return (
         <section className="monitoring-panel">
+
+            {/* =========================
+          HEADER
+      ========================= */}
 
             <div className="monitor-title">
 
@@ -70,10 +56,36 @@ function MonitoringPanel() {
                 </div>
 
                 <span className="status">
-                    ● OPTIMIZED
+                    {isOptimized
+                        ? "● OPTIMIZED"
+                        : "● NON-OPTIMIZED"}
                 </span>
 
             </div>
+
+
+            {/* =========================
+          CURRENT MODE
+      ========================= */}
+
+            <div className="last-action">
+
+                <span>
+                    ⚙️ Current Performance Mode
+                </span>
+
+                <strong>
+                    {isOptimized
+                        ? "⚡ OPTIMIZED"
+                        : "🔴 NON-OPTIMIZED"}
+                </strong>
+
+            </div>
+
+
+            {/* =========================
+          STATISTICS
+      ========================= */}
 
             <div className="monitor-grid">
 
@@ -85,6 +97,7 @@ function MonitoringPanel() {
                     </strong>
                 </div>
 
+
                 <div className="monitor-card">
                     <span>💼 LinkedIn</span>
 
@@ -93,6 +106,7 @@ function MonitoringPanel() {
                     </strong>
                 </div>
 
+
                 <div className="monitor-card">
                     <span>🐦 Twitter</span>
 
@@ -100,6 +114,7 @@ function MonitoringPanel() {
                         {statistics.twitter}
                     </strong>
                 </div>
+
 
                 <div className="monitor-card">
                     <span>📸 Instagram</span>
@@ -111,6 +126,11 @@ function MonitoringPanel() {
 
             </div>
 
+
+            {/* =========================
+          OPTIMIZATION TECHNIQUES
+      ========================= */}
+
             <div className="optimization-box">
 
                 <h3>
@@ -120,28 +140,94 @@ function MonitoringPanel() {
                 <div className="optimization-list">
 
                     <div>
-                        <span>React.memo</span>
-                        <b>✓ ACTIVE</b>
+                        <span>
+                            React.memo
+                        </span>
+
+                        <b>
+                            {isOptimized
+                                ? "✓ ACTIVE"
+                                : "✗ INACTIVE"}
+                        </b>
                     </div>
 
-                    <div>
-                        <span>useMemo</span>
-                        <b>✓ ACTIVE</b>
-                    </div>
 
                     <div>
-                        <span>useCallback</span>
-                        <b>✓ ACTIVE</b>
+                        <span>
+                            useMemo
+                        </span>
+
+                        <b>
+                            {isOptimized
+                                ? "✓ ACTIVE"
+                                : "✗ INACTIVE"}
+                        </b>
                     </div>
 
+
                     <div>
-                        <span>Redux State Management</span>
-                        <b>✓ ACTIVE</b>
+                        <span>
+                            useCallback
+                        </span>
+
+                        <b>
+                            {isOptimized
+                                ? "✓ ACTIVE"
+                                : "✗ INACTIVE"}
+                        </b>
+                    </div>
+
+
+                    <div>
+                        <span>
+                            Redux State Management
+                        </span>
+
+                        <b>
+                            ✓ ACTIVE
+                        </b>
                     </div>
 
                 </div>
 
             </div>
+
+
+            {/* =========================
+          EXPLANATION
+      ========================= */}
+
+            <div className="optimization-box">
+
+                <h3>
+                    💡 Why Optimized?
+                </h3>
+
+                {isOptimized ? (
+
+                    <p>
+                        React.memo prevents unnecessary component
+                        re-renders, useMemo caches expensive
+                        calculations, and useCallback keeps
+                        function references stable.
+                    </p>
+
+                ) : (
+
+                    <p>
+                        Optimization techniques are disabled.
+                        Components may re-render unnecessarily
+                        and calculations may run again.
+                    </p>
+
+                )}
+
+            </div>
+
+
+            {/* =========================
+          LAST ACTION
+      ========================= */}
 
             <div className="last-action">
 
@@ -150,7 +236,7 @@ function MonitoringPanel() {
                 </span>
 
                 <strong>
-                    {lastAction}
+                    {lastAction || "Application loaded"}
                 </strong>
 
             </div>

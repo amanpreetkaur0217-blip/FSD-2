@@ -1,6 +1,8 @@
 import React, {
+  lazy,
+  Suspense,
   useCallback,
-  useRef,
+  useState,
 } from "react";
 
 import {
@@ -9,41 +11,44 @@ import {
 } from "react-redux";
 
 import PostForm from "./components/PostForm";
-import Calendar from "./components/Calendar";
+
 import PostCard from "./components/PostCard";
+import PostCardNonOptimized from "./components/PostCardNonOptimized";
+
 import MonitoringPanel from "./components/MonitoringPanel";
 import RenderMonitor from "./components/RenderMonitor";
 
-import { deletePost } from "./redux/postSlice";
+import {
+  deletePost,
+} from "./redux/postSlice";
+
+import {
+  resetRenderStats,
+} from "./components/renderTracker";
 
 import "./App.css";
 
+// Lazy loading
+const CalendarOptimized = lazy(
+  () => import("./components/CalendarOptimized")
+);
+
+const CalendarNonOptimized = lazy(
+  () => import("./components/CalendarNonOptimized")
+);
 
 function App() {
 
   const dispatch = useDispatch();
 
-  // Track App component renders
-  const renderCount = useRef(0);
-
-  renderCount.current += 1;
-
-  // Get posts from Redux
   const posts = useSelector(
     (state) => state.posts.posts
   );
 
+  const [isOptimized, setIsOptimized] =
+    useState(true);
 
-  /*
-   * ==========================================
-   * useCallback
-   * ==========================================
-   *
-   * Keeps the delete function reference stable.
-   * This helps prevent unnecessary child
-   * re-renders when used with React.memo.
-   */
-
+  // Delete post
   const handleDelete = useCallback(
     (id) => {
       dispatch(deletePost(id));
@@ -51,13 +56,19 @@ function App() {
     [dispatch]
   );
 
+  // Toggle optimization
+  const handleToggle = () => {
+
+    setIsOptimized((previous) => !previous);
+
+    // Reset render counters
+    resetRenderStats();
+  };
 
   return (
     <div className="app">
 
-      {/* =====================================
-          HEADER
-          ===================================== */}
+      {/* ================= HEADER ================= */}
 
       <header className="header">
 
@@ -78,20 +89,81 @@ function App() {
 
       <main>
 
-        {/* =====================================
-            TOP SECTION
-            ===================================== */}
+        {/* ================= OPTIMIZATION CONTROLS ================= */}
+
+        <section className="optimization-toggle">
+
+          <h2>
+            ⚙️ Performance Optimization
+          </h2>
+
+          <p>
+            Compare optimized and non-optimized rendering
+          </p>
+
+
+          <div className="toggle-container">
+
+            <span>
+              🔴 Non-Optimized
+            </span>
+
+
+            <button
+              className={
+                isOptimized
+                  ? "toggle active"
+                  : "toggle"
+              }
+              onClick={handleToggle}
+            >
+
+              <span className="toggle-circle">
+
+                {isOptimized
+                  ? "✓"
+                  : "×"}
+
+              </span>
+
+            </button>
+
+
+            <span>
+              ⚡ Optimized
+            </span>
+
+          </div>
+
+
+          <div className="mode-display">
+
+            Current Mode:
+
+            <strong>
+
+              {isOptimized
+                ? " ⚡ OPTIMIZED"
+                : " 🔴 NON-OPTIMIZED"}
+
+            </strong>
+
+          </div>
+
+        </section>
+
+
+        {/* ================= POST SECTION ================= */}
 
         <section className="top-section">
+
 
           {/* POST FORM */}
 
           <PostForm />
 
 
-          {/* =================================
-              SCHEDULED POST LIST
-              ================================= */}
+          {/* POST LIST */}
 
           <div className="post-list">
 
@@ -112,15 +184,25 @@ function App() {
             </div>
 
 
-            {/* Render each post */}
-
             {posts.map((post) => (
 
-              <PostCard
-                key={post.id}
-                post={post}
-                onDelete={handleDelete}
-              />
+              isOptimized ? (
+
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  onDelete={handleDelete}
+                />
+
+              ) : (
+
+                <PostCardNonOptimized
+                  key={post.id}
+                  post={post}
+                  onDelete={handleDelete}
+                />
+
+              )
 
             ))}
 
@@ -129,35 +211,45 @@ function App() {
         </section>
 
 
-        {/* =====================================
-            INTERACTIVE CALENDAR
-            ===================================== */}
+        {/* ================= CALENDAR ================= */}
 
-        <Calendar />
+        <Suspense
+          fallback={
+            <div className="loading">
+              Loading Calendar...
+            </div>
+          }
+        >
+
+          {isOptimized ? (
+
+            <CalendarOptimized />
+
+          ) : (
+
+            <CalendarNonOptimized />
+
+          )}
+
+        </Suspense>
 
 
-        {/* =====================================
-            RENDER MONITOR
-            ===================================== */}
+        {/* ================= RENDER MONITOR ================= */}
 
-        <RenderMonitor
-          renderCount={renderCount.current}
+        <RenderMonitor />
+
+
+        {/* ================= PERFORMANCE PANEL ================= */}
+
+        <MonitoringPanel
+          isOptimized={isOptimized}
         />
-
-
-        {/* =====================================
-            PERFORMANCE MONITORING
-            ===================================== */}
-
-        <MonitoringPanel />
 
 
       </main>
 
 
-      {/* =====================================
-          FOOTER
-          ===================================== */}
+      {/* ================= FOOTER ================= */}
 
       <footer>
 
@@ -171,6 +263,5 @@ function App() {
     </div>
   );
 }
-
 
 export default App;
